@@ -13,21 +13,21 @@ The framework operates across three integrated layers:
 3. **STM32F401 Embedded Mitigation (SIFT):** The bare-metal C/C++ firmware operates as a Multi-Channel Analyzer (MCA) and implements active mitigation against Single Event Upsets (SEUs) and Single Event Functional Interrupts (SEFIs) using Triple Modular Redundancy (TMR), internal software watchdogs, and memory scrubbing.
 
 ## Scientific Background & State of the Art
-The usage of COTS microcontrollers in radiation environments (such as Low Earth Orbit or CERN accelerator tunnels) offers significant advantages in compactness, power efficiency, and cost compared to traditional radiation-hardened components[cite: 14]. However, commercial MCUs lack hardware-based Triple Modular Redundancy (TMR)[cite: 14] and are highly susceptible to both cumulative damage and stochastic effects:
+The usage of COTS microcontrollers in radiation environments (such as Low Earth Orbit or CERN accelerator tunnels) offers significant advantages in compactness, power efficiency, and cost compared to traditional radiation-hardened components. However, commercial MCUs lack hardware-based Triple Modular Redundancy (TMR) and are highly susceptible to both cumulative damage and stochastic effects:
 
-* **Single Event Effects (SEE):** High-energy particles induce defects in the crystal lattice by atom displacement[cite: 17]. In modern CMOS SRAMs, low-energy protons primarily cause SEUs through direct ionization, while high-energy protons trigger nuclear reactions resulting in high-LET (Linear Energy Transfer) recoil ions[cite: 7, 9].
-* **Soft and Hard Errors:** These stochastic events manifest as non-destructive soft errors (e.g., bit-flips in SRAM or configuration registers) or hard SEFIs that disrupt the Program Counter or cause peripheral crashes[cite: 17]. 
-* **Total Ionizing Dose (TID):** Long-term exposure generates electron-hole pairs trapped in the silicon oxide, leading to increased leakage currents, analog performance degradation, and eventual loss of Flash writability[cite: 16].
+* **Single Event Effects (SEE):** High-energy particles induce defects in the crystal lattice by atom displacement. In modern CMOS SRAMs, low-energy protons primarily cause SEUs through direct ionization, while high-energy protons trigger nuclear reactions resulting in high-LET (Linear Energy Transfer) recoil ions.
+* **Soft and Hard Errors:** These stochastic events manifest as non-destructive soft errors (e.g., bit-flips in SRAM or configuration registers) or hard SEFIs that disrupt the Program Counter or cause peripheral crashes. 
+* **Total Ionizing Dose (TID):** Long-term exposure generates electron-hole pairs trapped in the silicon oxide, leading to increased leakage currents, analog performance degradation, and eventual loss of Flash writability.
 
 ### Mitigation Strategy
-Since hardware-level error correction is often unavailable on COTS devices, Software-Implemented Hardware Fault Tolerance (SIHFT) techniques are mandatory to ensure system reliability[cite: 5]. Relying solely on external hardware watchdogs is insufficient to recover from all SEFI states, as a microcontroller can fail while still feeding the external watchdog pins[cite: 25]. 
+Since hardware-level error correction is often unavailable on COTS devices, Software-Implemented Hardware Fault Tolerance (SIHFT) techniques are mandatory to ensure system reliability. Relying solely on external hardware watchdogs is insufficient to recover from all SEFI states, as a microcontroller can fail while still feeding the external watchdog pins. 
 
 Therefore, this framework implements comprehensive Software Mitigation Schemes (SMS):
-* **Memory Scrubbing & EDAC:** Periodic software-driven error detection and correction routines to prevent the accumulation of Multiple-Bit Upsets (MBUs) in the SRAM[cite: 6].
-* **Internal Software Watchdogs:** Real-Time Clock (RTC) based software watchdogs to detect synchronization failures, ensuring the MCU recovers from anomalous sleep states or infinite loops[cite: 26].
-* **Instruction & Data Redundancy:** Implementation of Software TMR for critical counters and data structures[cite: 27], along with control-flow checking signatures to validate execution paths[cite: 6].
+* **Memory Scrubbing & EDAC:** Periodic software-driven error detection and correction routines to prevent the accumulation of Multiple-Bit Upsets (MBUs) in the SRAM.
+* **Internal Software Watchdogs:** Real-Time Clock (RTC) based software watchdogs to detect synchronization failures, ensuring the MCU recovers from anomalous sleep states or infinite loops.
+* **Instruction & Data Redundancy:** Implementation of Software TMR for critical counters and data structures, along with control-flow checking signatures to validate execution paths.
 
-Empirical validation in accelerated test facilities has demonstrated that implementing these software mitigation schemes drastically improves operational availability, reducing system downtime in COTS components from 48.82% to 2.58% under heavy irradiation[cite: 27].
+Empirical validation in accelerated test facilities has demonstrated that implementing these software mitigation schemes drastically improves operational availability, reducing system downtime in COTS components from 48.82% to 2.58% under heavy irradiation.
 
 ## Getting Started
 ### Prerequisites
